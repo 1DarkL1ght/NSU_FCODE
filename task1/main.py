@@ -2,19 +2,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cv2
 from skimage.data import astronaut
+from jsonargparse import CLI
 
 
 def process_image(image: cv2.Mat, delta: float) -> cv2.Mat:
+    """Changes S (saturation) channel in HSV image"""
+
     image_cpy = image.copy()
-    image_cpy[:, :, 2] = image_cpy[:, :, 2] * delta
+    image_cpy[:, :, 1] = image_cpy[:, :, 1] * delta
 
     return image_cpy
 
 
-def main():
+def main(image_path: str | None=None):
+    """Main function. Loads image, converts to HSV, calls process_image(), converts back to BGR, visualizes results"""
     # Load image
-    image = astronaut()
-    
+    if image_path is None:
+        image = astronaut()
+    else:
+        image = cv2.imread(image_path)
+
     # Convert to HSV color palette
     image_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     

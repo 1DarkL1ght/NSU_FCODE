@@ -18,6 +18,7 @@ def parse_arguments():
     parser.add_argument("--chosen_day", type=str, help="Выбранная дата", default=date.today().strftime('%Y-%m-%d'))
     parser.add_argument("--chosen_week_start", type=str, help="Начало выбранной недели", default=date.today().strftime('%Y-%m-%d'))
     parser.add_argument("--chosen_week_finish", type=str, help="Конец выбранной недели", default=(date.today() + pd.Timedelta(days=7)).strftime('%Y-%m-%d'))
+    parser.add_argument("--num_missings", type=int, help="Количество пропусков", default=1)
 
     return parser.parse_args()  
 
@@ -32,7 +33,7 @@ def main():
     validate_frequency_and_period(args.freq, args.period)
 
     dategraphic = DateGraphic(start_date, args.freq, args.period, args.filename)
-    dategraphic.add_missing_values(num_missings=3)
+    dategraphic.add_missing_values(num_missings=args.num_missings)
     dategraphic.interpolate_missing_values()
     dategraphic.save_graphic()
 
